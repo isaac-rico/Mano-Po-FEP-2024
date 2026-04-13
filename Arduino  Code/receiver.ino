@@ -43,12 +43,12 @@ SensorData data;
 
 void setup() {
   Serial.begin(9600);
-  // pinMode(LmotorPin1, OUTPUT);
-  // pinMode(LmotorPin2, OUTPUT);
-  // pinMode(ENA_PIN_LEFT, OUTPUT);
-  // pinMode(RmotorPin1, OUTPUT);
-  // pinMode(RmotorPin2, OUTPUT);
-  // pinMode(ENA_PIN_RIGHT, OUTPUT);
+  pinMode(LmotorPin1, OUTPUT);
+  pinMode(LmotorPin2, OUTPUT);
+  pinMode(ENA_PIN_LEFT, OUTPUT);
+  pinMode(RmotorPin1, OUTPUT);
+  pinMode(RmotorPin2, OUTPUT);
+  pinMode(ENA_PIN_RIGHT, OUTPUT);
   radio.begin();
   radio.setPALevel(RF24_PA_MIN);
   radio.setDataRate(RF24_2MBPS);
@@ -100,21 +100,8 @@ void drive(int16_t ax, int16_t ay){
   Serial.print(data.ax);
   Serial.print(", ");
   Serial.println(data.ay);
-
-  // analogWrite(motor1en, 100);
-  // digitalWrite(in1, HIGH);
-  // digitalWrite(in2, LOW);
-  // delay(1000);
-  // digitalWrite(in1, LOW);
   int16_t speed = 0;
 
-  // if (abs(data.ay) >= 10000) {
-  //   speed = 255;
-  // } else if (abs(data.ay) >= 2000) {
-  //   speed = static_cast<int>((abs(data.ay) - 2000) * (255.0 / 8000.0));
-  // } else {
-  //   speed = 0;
-  // }
   if (abs(data.ax) >= 230){
     speed = 255;
   } 
@@ -124,52 +111,53 @@ void drive(int16_t ax, int16_t ay){
   else {
     speed = 0;
   }
-  // if (speed > 255) {
-  //   speed = 255;
-  // }
 
   Serial.println(speed);
 
   if (data.ay < 75) {
-    // analogWrite(ENA_PIN_LEFT, speed);
-    // analogWrite(ENA_PIN_RIGHT, speed);
-    // digitalWrite(LmotorPin1, LOW); 
-    // digitalWrite(LmotorPin2, HIGH);
-    // digitalWrite(RmotorPin1, LOW); 
-    // digitalWrite(RmotorPin2, HIGH);
+
+    analogWrite(ENA_PIN_LEFT, speed);
+    analogWrite(ENA_PIN_RIGHT, speed);
+    digitalWrite(LmotorPin1, LOW); 
+    digitalWrite(LmotorPin2, HIGH);
+    digitalWrite(RmotorPin1, LOW); 
+    digitalWrite(RmotorPin2, HIGH);
     Serial.println("Tilted Right");
+
   } else if (data.ay > 200) {
-    // analogWrite(ENA_PIN_LEFT, speed);
-    // analogWrite(ENA_PIN_RIGHT, speed);
-    // digitalWrite(LmotorPin1, HIGH); 
-    // digitalWrite(LmotorPin2, LOW);
-    // digitalWrite(RmotorPin1, HIGH); 
-    // digitalWrite(RmotorPin2, LOW);
+
+    analogWrite(ENA_PIN_LEFT, speed);
+    analogWrite(ENA_PIN_RIGHT, speed);
+    digitalWrite(LmotorPin1, HIGH); 
+    digitalWrite(LmotorPin2, LOW);
+    digitalWrite(RmotorPin1, HIGH); 
+    digitalWrite(RmotorPin2, LOW);
     Serial.println("Tilted Left");
   }
+
   if (data.ax > 190) {
 
-    // analogWrite(ENA_PIN_LEFT, speed);
-    // analogWrite(ENA_PIN_RIGHT, speed);
-    // digitalWrite(LmotorPin1, LOW); 
-    // digitalWrite(LmotorPin2, HIGH);
+    analogWrite(ENA_PIN_LEFT, speed);
+    analogWrite(ENA_PIN_RIGHT, speed);
+    digitalWrite(LmotorPin1, LOW); 
+    digitalWrite(LmotorPin2, HIGH);
     
-    // digitalWrite(RmotorPin1, HIGH); 
-    // digitalWrite(RmotorPin2, LOW);
+    digitalWrite(RmotorPin1, HIGH); 
+    digitalWrite(RmotorPin2, LOW);
 
     Serial.println("Tilted Forward");
     
   } else if (data.ax < 100) {
-    // analogWrite(ENA_PIN_LEFT, speed);
-    // analogWrite(ENA_PIN_RIGHT, speed);
-    // digitalWrite(LmotorPin1, HIGH); 
-    // digitalWrite(LmotorPin2, LOW);
-    // digitalWrite(RmotorPin1, LOW); 
-    // digitalWrite(RmotorPin2, HIGH);
+
+    analogWrite(ENA_PIN_LEFT, speed);
+    analogWrite(ENA_PIN_RIGHT, speed);
+    digitalWrite(LmotorPin1, HIGH); 
+    digitalWrite(LmotorPin2, LOW);
+    digitalWrite(RmotorPin1, LOW); 
+    digitalWrite(RmotorPin2, HIGH);
 
     Serial.println("Tilted Backward");
   }
-  
   
 }  
 void rotate(int16_t ax){
@@ -177,41 +165,41 @@ void rotate(int16_t ax){
   // Left/right controlled with gyroscope
   Serial.println("Rotate Mode!");
 
-  // while(check_flex_sensor && data.ax > 6000) {
-  //   static HandState currentState = NEUTRAL; 
-  //   HandState newState = determineServoState();
-  //   if (newState != currentState) {
-  //     currentState = newState;
-  //   }
-  //   switch (currentState) {
-  //     case ROTATE_BASE:
-  //       check_flex_sensor = true;
-  //       myStepper.step(1);
-  //       Serial.print("steps:");
-  //       Serial.println(stepCount);
-  //       stepCount++;
-  //       delay(500);
-  //     Serial.println("Rotate Right");
-  //   }
-  // }
+  while(check_flex_sensor && data.ax > 6000) {
+    static HandState currentState = NEUTRAL; 
+    HandState newState = determineServoState();
+    if (newState != currentState) {
+      currentState = newState;
+    }
+    switch (currentState) {
+      case ROTATE_BASE:
+        check_flex_sensor = true;
+        myStepper.step(1);
+        Serial.print("steps:");
+        Serial.println(stepCount);
+        stepCount++;
+        delay(500);
+      Serial.println("Rotate Right");
+    }
+  }
 
-  // while (data.ax < -6000) {
-  //   static HandState currentState = NEUTRAL; 
-  //   HandState newState = determineServoState();
-  //   if (newState != currentState) {
-  //     currentState = newState;
-  //   }
-  //   switch (currentState) {
-  //   case ROTATE_BASE:
-  //     check_flex_sensor = true;
-  //     myStepper.step(-1);
-  //     Serial.print("steps:");
-  //     Serial.println(stepCount);
-  //     stepCount--;
-  //     delay(500);
-  //   Serial.println("Rotate Left");
-  // }
-
+  while (data.ax < -6000) {
+    static HandState currentState = NEUTRAL; 
+    HandState newState = determineServoState();
+    if (newState != currentState) {
+      currentState = newState;
+    }
+    switch (currentState) {
+    case ROTATE_BASE:
+      check_flex_sensor = true;
+      myStepper.step(-1);
+      Serial.print("steps:");
+      Serial.println(stepCount);
+      stepCount--;
+      delay(500);
+    Serial.println("Rotate Left");
+    }
+  }
 }
 
 void wrist(int16_t ay){

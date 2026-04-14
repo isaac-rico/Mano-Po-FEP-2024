@@ -105,6 +105,7 @@ This architecture prevents overlapping commands and makes robot control feel mor
     - 255
 
 **Joint Stabilization**
+
 Joint motion uses threshold-based gyroscope filtering (±6000) to reduce unintended jitter caused by natural hand shakiness.
 
 ---

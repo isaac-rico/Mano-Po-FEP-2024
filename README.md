@@ -77,6 +77,7 @@ struct SensorData {
 ```
 --- 
 **State Machine Logic**
+
 The robot operates through a set of mutually exclusive states determined by determineState():
 
 | Mode | Gesture | Action |
